@@ -3,10 +3,10 @@ class IOPSCalculator {
     constructor() {
         // Define server types with their IOPS values
         this.serverTypes = {
-            'System X': { name: 'System X', iops_1u: 5000, iops_2u: 12000 },
-            'RISC': { name: 'RISC', iops_1u: 5000, iops_2u: 12000 },
-            'Mainframe': { name: 'Mainframe', iops_1u: 5000, iops_2u: 12000 },
-            'GPU': { name: 'GPU', iops_1u: 5000, iops_2u: 12000 }
+            'System X': { name: 'System X', iops_1u: 5000, iops_2u: 12000, cost_1u: 400, cost_2u: 1600 },
+            'RISC': { name: 'RISC', iops_1u: 5000, iops_2u: 12000, cost_1u: 450, cost_2u: 1750 },
+            'Mainframe': { name: 'Mainframe', iops_1u: 5000, iops_2u: 12000, cost_1u: 850, cost_2u: 2000 },
+            'GPU': { name: 'GPU', iops_1u: 5000, iops_2u: 12000, cost_1u: 550, cost_2u: 2200 }
         };
 
         this.requirements = [];
@@ -73,15 +73,19 @@ class IOPSCalculator {
         // If target is less than 12k IOPS, use 1U servers only
         if (targetIops < 12000) {
             const count1U = Math.ceil(targetIops / 5000);
+            const cost1U = count1U * server.cost_1u;
             return {
                 type: serverType,
                 count2U: 0,
                 count1U: count1U,
-                totalIops: count1U * 5000,
+                totalIops: count1U * server.iops_1u,
                 totalRackSpace: count1U * 1,
                 totalPorts: count1U,
-                isExact: (count1U * 5000 === targetIops),
-                exceeded: (count1U * 5000 > targetIops)
+                cost1U: cost1U,
+                cost2U: 0,
+                totalCost: cost1U,
+                isExact: (count1U * server.iops_1u === targetIops),
+                exceeded: (count1U * server.iops_1u > targetIops)
             };
         }
 
@@ -92,16 +96,22 @@ class IOPSCalculator {
         // Add 1U servers to cover remaining IOPS
         const count1U = Math.ceil(remainingIops / 5000);
         const totalPorts = count2U + count1U;
+        const cost2U = count2U * server.cost_2u;
+        const cost1U = count1U * server.cost_1u;
+        const totalCost = cost2U + cost1U;
 
         return {
             type: serverType,
             count2U: count2U,
             count1U: count1U,
-            totalIops: (count2U * 12000) + (count1U * 5000),
+            totalIops: (count2U * server.iops_2u) + (count1U * server.iops_1u),
             totalRackSpace: (count2U * 2) + (count1U * 1),
             totalPorts: totalPorts,
-            isExact: ((count2U * 12000) + (count1U * 5000) === targetIops),
-            exceeded: ((count2U * 12000) + (count1U * 5000) > targetIops)
+            cost1U: cost1U,
+            cost2U: cost2U,
+            totalCost: totalCost,
+            isExact: ((count2U * server.iops_2u) + (count1U * server.iops_1u) === targetIops),
+            exceeded: ((count2U * server.iops_2u) + (count1U * server.iops_1u) > targetIops)
         };
     }
 
@@ -172,6 +182,18 @@ class IOPSCalculator {
                         <span>Total IOPS:</span>
                         <strong>${sol.solution.totalIops.toLocaleString()}</strong>
                     </div>
+                    <div class="summary-row">
+                        <span>Cost (1U):</span>
+                        <strong>$${sol.solution.cost1U.toLocaleString()}</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Cost (2U):</span>
+                        <strong>$${sol.solution.cost2U.toLocaleString()}</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total Cost:</span>
+                        <strong>$${sol.solution.totalCost.toLocaleString()}</strong>
+                    </div>
                 </div>
                 ${matchStatus}
             </div>
@@ -185,7 +207,8 @@ class IOPSCalculator {
             count2U: 0,
             count1U: 0,
             ports: 0,
-            rackSpace: 0
+            rackSpace: 0,
+            cost: 0
         };
 
         solutions.forEach(sol => {
@@ -193,6 +216,7 @@ class IOPSCalculator {
             totals.count1U += sol.solution.count1U;
             totals.ports += sol.solution.totalPorts;
             totals.rackSpace += sol.solution.totalRackSpace;
+            totals.cost += sol.solution.totalCost;
         });
 
         const totalServers = totals.count2U + totals.count1U;
@@ -201,6 +225,7 @@ class IOPSCalculator {
         document.getElementById('totalAllServers').textContent = totalServers;
         document.getElementById('totalPorts').textContent = totals.ports;
         document.getElementById('totalRack').textContent = `${totals.rackSpace} U`;
+        document.getElementById('totalCost').textContent = `$${totals.cost.toLocaleString()}`;
 
         document.getElementById('totalsSummary').style.display = 'block';
         resultsContainer.style.display = 'block';
