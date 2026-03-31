@@ -1,0 +1,38 @@
+﻿* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background: radial-gradient(circle at top, #10182b 0%, #070d1a 45%, #03111e 100%);
+    color: #d9e6ff;
+    min-height: 100vh;
+}
+.container {
+    max-width: 980px;
+    margin: 24px auto;
+    padding: 16px 14px 32px;
+}
+header h1 { margin: 0 0 8px; font-size: 2rem; }
+header p { margin: 0 0 24px; color: #9ab1cc; }
+.card { background: rgba(12, 19, 33, 0.95); border-radius: 12px; border: 1px solid rgba(84, 120, 175, 0.25); padding: 16px; margin-bottom: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.35); }
+.input-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.input-row label { width: 120px; font-weight: 700; color: #cad8ef; }
+.input-row input, .input-row select { flex: 1; min-width: 180px; padding: 10px 12px; border: 1px solid #5a708f; border-radius: 8px; background: #111b2f; color: #eaf0ff; }
+.input-row input:focus, .input-row select:focus, .button-row button:focus { outline: 2px solid #2f79ff; outline-offset: 2px; }
+.button-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.button-row button { padding: 10px 14px; border: 1px solid #5a708f; border-radius: 6px; color: #fff; background: #263b5c; cursor: pointer; font-weight: 700; transition: all 150ms ease; }
+.button-row button:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.35); }
+.button-row button.primary { background: #2e77ff; border-color: #3d8aff; }
+.list .requirement-item { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(100,130,168,0.3); padding: 10px 0; }
+.requirement-item-info { display: flex; flex-direction: column; }
+.requirement-item-type { font-size: 1rem; font-weight: 700; color: #eff6ff; }
+.requirement-item-iops { font-size: 0.9rem; color: #9ab1cc; }
+.requirement-item-remove { background: #b54141; border: none; color: #fff; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+.result-card { border: 1px solid rgba(97,126,167,0.45); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: rgba(15,25,41,0.95); }
+.result-card-title { font-weight: 700; margin-bottom: 8px; color: #e3ecff; }
+.results-summary { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px; margin-top: 8px; }
+.summary-row { display: flex; justify-content: space-between; }
+.match-status { margin-top: 8px; font-weight: 700; }
+.match-status.exact { color: #38ae5f; }
+.match-status.exceeded { color: #e3b444; }
+.totals { margin-top: 10px; display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; }
+footer { text-align: center; margin-top: 8px; color: #8da0bb; font-size: 0.9rem; }

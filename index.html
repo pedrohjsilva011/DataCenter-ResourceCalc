@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataCenter Resource Calculator - Dark Mode</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>Data Center Resource Calculator</h1>
+            <p>Define one or more server type requirements with target IOPS, then calculates server counts.</p>
+        </header>
+
+        <section class="card" id="requirementSection">
+            <h2>Add Requirement</h2>
+            <div class="input-row">
+                <label for="serverTypeSelect">Server Type</label>
+                <select id="serverTypeSelect">
+                    <option value="">Select a server type</option>
+                    <option value="System X">System X</option>
+                    <option value="RISC">RISC</option>
+                    <option value="Mainframe">Mainframe</option>
+                    <option value="GPU">GPU</option>
+                </select>
+            </div>
+            <div class="input-row">
+                <label for="requirementIops">Target IOPS</label>
+                <input id="requirementIops" type="number" min="1" placeholder="e.g. 30000">
+            </div>
+            <div class="button-row">
+                <button id="addRequirementBtn">Add Requirement</button>
+                <button id="calculateBtn" class="primary">Calculate</button>
+            </div>
+            <div id="requirementsList" class="list"></div>
+        </section>
+
+        <section class="card" id="results" style="display:none;">
+            <h2>Results</h2>
+            <div id="resultsSolutions"></div>
+            <h3>Totals</h3>
+            <div id="totalsSummary" class="totals" style="display:none;">
+                <div>2U: <strong id="totalCount2U">0</strong></div>
+                <div>1U: <strong id="totalCount1U">0</strong></div>
+                <div>Total Servers: <strong id="totalAllServers">0</strong></div>
+                <div>Ports: <strong id="totalPorts">0</strong></div>
+                <div>Rack Space: <strong id="totalRack">0 U</strong></div>
+            </div>
+        </section>
+
+        <footer>
+            100% AI code slop, don't expect much aside form basic calculations.
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
